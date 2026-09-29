@@ -1,0 +1,35 @@
+import "server-only";
+
+import { unstable_cache } from "next/cache";
+
+import { createPublicClient } from "@/lib/supabase/public";
+
+export type CatalogOption = { slug: string; nome: string };
+
+const CATALOG_REVALIDATE_SECONDS = 60 * 60;
+
+export const listCategories = unstable_cache(
+  async (): Promise<CatalogOption[]> => {
+    const { data, error } = await createPublicClient()
+      .from("categories")
+      .select("slug, nome")
+      .order("ordem");
+    if (error) throw error;
+    return data;
+  },
+  ["catalog:categories"],
+  { revalidate: CATALOG_REVALIDATE_SECONDS },
+);
+
+export const listCities = unstable_cache(
+  async (): Promise<CatalogOption[]> => {
+    const { data, error } = await createPublicClient()
+      .from("cities")
+      .select("slug, nome")
+      .order("nome");
+    if (error) throw error;
+    return data;
+  },
+  ["catalog:cities"],
+  { revalidate: CATALOG_REVALIDATE_SECONDS },
+);

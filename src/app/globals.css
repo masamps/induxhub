@@ -1,0 +1,65 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Tema único (escuro). Tokens nomeados pelo papel, não pela cor. */
+:root {
+  --background: #0b1220;
+  --surface: #151f34;
+  --surface-raised: #1c2842;
+  --footer: #060b14;
+  --foreground: #e8eef8;
+  --muted-foreground: #a3b3cc;
+  --border: #26344f;
+  --primary: #00d4ff;
+  --primary-foreground: #04131f;
+  --whatsapp: #25d366;
+  --whatsapp-foreground: #052e14;
+  --premium: #f5c451;
+  --premium-foreground: #2b1d00;
+  --danger: #ff6b6b;
+  --ring: #00d4ff;
+  --radius: 1rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-footer: var(--footer);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --color-premium: var(--premium);
+  --color-premium-foreground: var(--premium-foreground);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: var(--radius);
+  --shadow-card: 0 8px 24px -12px rgb(0 0 0 / 0.55);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@utility bg-hero {
+  background-image: linear-gradient(135deg, #0b1220 0%, #123b6b 55%, #0f7a8a 100%);
+}
