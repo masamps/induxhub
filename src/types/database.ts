@@ -411,6 +411,9 @@ isOneToOne: false
 "refresh_company_stats":
 { Args: { "p_company_id": string }; Returns: undefined
                            },
+"set_company_buyer":
+{ Args: { "p_company_id": string,"p_enabled": boolean }; Returns: Database["public"]['Enums']["company_type"]
+                           },
 "reply_to_quote":
 { Args: { "p_mensagem": string,"p_prazo_dias"?: number,"p_prestador_id": string,"p_quote_id": string,"p_valor_estimado"?: number }; Returns: string
                            },

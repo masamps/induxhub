@@ -3,7 +3,7 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 
-select plan(24);
+select plan(27);
 
 -- Helpers ------------------------------------------------------------------------
 
@@ -162,6 +162,27 @@ select pg_temp.login('termo-boituva');
 select ok(
   (select count(*) from public.quote_requests where id = pg_temp.quote('Têmpera por indução em pinos')) = 1,
   'destinatário vê o pedido recebido'
+);
+select pg_temp.logout();
+
+-- Prestador passa a também contratar ------------------------------------------------
+
+select pg_temp.login('termo-boituva');
+select is(
+  public.set_company_buyer(pg_temp.cid('termo-boituva'), true),
+  'ambos'::public.company_type,
+  'prestador ativa a opção de contratar'
+);
+select throws_ok(
+  format($$ select public.set_company_buyer(%L, true) $$, pg_temp.cid('solda-forte-salto')),
+  '42501', null, 'não altera o tipo de empresa alheia'
+);
+select pg_temp.logout();
+
+select pg_temp.login('embalagens-itu');
+select throws_ok(
+  format($$ select public.set_company_buyer(%L, false) $$, pg_temp.cid('embalagens-itu')),
+  '22023', null, 'contratante não vira prestador por esta função'
 );
 select pg_temp.logout();
 

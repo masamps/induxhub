@@ -17,5 +17,5 @@ Home, busca e perfil são as páginas de maior tráfego e não dependem de quem 
 
 ## Consequências
 
-- Mudanças no perfil levam até 5 minutos para aparecer. Quando existir edição de perfil, a action chama `revalidatePath`.
-- O cliente com sessão (`@supabase/ssr`) entra junto com login e painel.
+- Mudanças feitas no painel chamam `revalidatePath` e aparecem na hora. Outras mudanças levam até 5 minutos.
+- O cliente com sessão (`@supabase/ssr`) só é usado nas rotas logadas (ADR 0007).
