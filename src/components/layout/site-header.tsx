@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { AccountNav } from "@/features/auth/components/account-nav";
 
 import { Container } from "./container";
 import { Logo } from "./logo";
@@ -14,14 +15,7 @@ export function SiteHeader() {
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link href="/buscar">Buscar fornecedores</Link>
           </Button>
-          <Button asChild variant="ghost" className="px-3 sm:px-5">
-            <Link href="/login">Entrar</Link>
-          </Button>
-          <Button asChild className="px-4 sm:px-5">
-            <Link href="/cadastro">
-              Cadastrar<span className="hidden sm:inline"> empresa</span>
-            </Link>
-          </Button>
+          <AccountNav />
         </nav>
       </Container>
     </header>
