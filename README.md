@@ -40,12 +40,15 @@ O build gera a home estaticamente, então precisa do banco acessível.
 | `npm run db:reset` | Recria o banco local com migrations e seed |
 | `npm run db:test` | Testes pgTAP de RLS e regras de negócio |
 | `npm run db:types` | Regenera `src/types/database.ts` a partir do banco local |
+| `npm run test:e2e` | Fluxo completo no navegador (Playwright). Precisa do banco local com seed e de `npm run build` |
 
 ## Deploy (Vercel)
 
 1. Crie um projeto no Supabase e rode `npx supabase link` e `npx supabase db push`.
 2. Importe o repositório na Vercel e configure as três variáveis acima.
 3. Não rode o seed em produção: ele cria usuários de teste.
+4. No Supabase, em Authentication > URL Configuration: Site URL com a URL da Vercel e Redirect URL `https://<seu-dominio>/**`.
+5. Sem SMTP próprio, desligue "Confirm email" em Authentication > Providers > Email (o envio gratuito é limitado). Ao ligar, o cadastro continua funcionando: o usuário confirma pelo link e volta para a etapa seguinte.
 
 ## Páginas
 
@@ -54,7 +57,15 @@ O build gera a home estaticamente, então precisa do banco acessível.
 | `/` | Home com busca, categorias e destaques |
 | `/buscar` | Resultados com filtros, ordenação e paginação |
 | `/prestador/[slug]` | Perfil público completo |
-| `/login`, `/cadastro`, `/orcamentos/novo` | Placeholder "em breve" |
+| `/login`, `/login/recuperar`, `/login/nova-senha` | Entrar e recuperar senha |
+| `/cadastro` | Escolha entre contratar ou oferecer serviços |
+| `/cadastro/empresa`, `/cadastro/prestador` | Cadastro em etapas com barra de progresso e rascunho salvo |
+| `/painel` | Métricas de 30 dias, gráfico, checklist do perfil, pedidos recentes |
+| `/painel/perfil` | Dados, área de atuação, logo e fotos, equipamentos, certificações, clientes |
+| `/painel/orcamentos` | Pedidos recebidos pelo prestador (novos, respondidos) |
+| `/orcamentos` | Pedidos do solicitante |
+| `/orcamentos/novo` | Novo pedido com anexos e prévia de quantos fornecedores recebem |
+| `/orcamentos/[id]` | Solicitante compara propostas, escolhe e avalia. Prestador responde |
 
 ## Estrutura
 
@@ -93,6 +104,7 @@ Todo usuário do seed usa o e-mail `<slug>@induxhub.test` e a senha `induxhub123
 - Pedidos, respostas e fechamento passam por funções (`create_quote_request`, `reply_to_quote`, `close_quote`).
 - Avaliação só por quem pediu o orçamento e recebeu resposta daquele prestador.
 - Plano gratuito: até 5 fotos. Premium: até 30.
+- Prestador liga ou desliga "também contrato serviços" por `set_company_buyer` (único jeito de mudar `tipo`).
 - Métricas do perfil via `track_event()`, agregadas por dia.
 - Busca: `search_companies(query, cidade, categoria, ordenação, limite, offset)`. Premium sempre primeiro.
 
