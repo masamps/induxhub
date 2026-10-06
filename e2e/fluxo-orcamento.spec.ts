@@ -43,7 +43,7 @@ async function login(page: Page, email: string, senha: string, next = "/painel")
   await page.goto(`/login?next=${encodeURIComponent(next)}`);
   await page.getByLabel("E-mail").fill(email);
   await page.getByLabel("Senha", { exact: true }).fill(senha);
-  await page.getByRole("button", { name: "Entrar" }).click();
+  await page.getByRole("button", { name: "Entrar", exact: true }).click();
   await page.waitForURL(`**${next}`);
 }
 
@@ -53,7 +53,7 @@ test.describe.serial("fluxo de orçamento", () => {
     await expect(page).toHaveURL(/\/login\?next=%2Fpainel/);
     await page.getByLabel("E-mail").fill("ninguem@e2e.test");
     await page.getByLabel("Senha", { exact: true }).fill("errada123");
-    await page.getByRole("button", { name: "Entrar" }).click();
+    await page.getByRole("button", { name: "Entrar", exact: true }).click();
     await expect(page.getByRole("alert").filter({ hasText: "E-mail ou senha incorretos" })).toBeVisible();
   });
 

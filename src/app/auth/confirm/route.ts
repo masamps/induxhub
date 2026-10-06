@@ -4,13 +4,16 @@ import { NextResponse, type NextRequest } from "next/server";
 import { safeNext } from "@/lib/redirect";
 import { createServerSupabase } from "@/lib/supabase/server";
 
-/** Destino dos links de e-mail (confirmação e recuperação de senha). */
+/** Destino dos links de e-mail (confirmação e recuperação de senha) e da volta do Google. */
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const next = safeNext(searchParams.get("next"));
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
+
+  // Provedor OAuth recusou ou o usuário cancelou.
+  if (searchParams.get("error")) return NextResponse.redirect(`${origin}/login?erro=google`);
 
   const supabase = await createServerSupabase();
   const { error } = code
