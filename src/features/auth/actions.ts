@@ -35,6 +35,18 @@ export async function signIn(input: LoginInput, next?: string): Promise<ActionRe
   redirect(safeNext(next));
 }
 
+/** Leva ao Google. A volta cai em /auth/confirm, que troca o código pela sessão. */
+export async function signInWithGoogle(next?: string) {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: confirmUrl(safeNext(next)) },
+  });
+  if (error || !data.url) redirect("/login?erro=google");
+
+  redirect(data.url);
+}
+
 /** Cria a conta. Sem confirmação de e-mail (ou com AUTH_AUTOCONFIRM), já volta com sessão. */
 export async function signUp(
   input: SignUpInput,
