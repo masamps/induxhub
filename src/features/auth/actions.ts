@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { fail, INVALID_INPUT, ok, type ActionResult } from "@/lib/action-result";
 import { env } from "@/lib/env";
 import { safeNext } from "@/lib/redirect";
+import { autoconfirmEnabled, createAdminClient } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 import { authErrorMessage } from "./errors";
@@ -34,7 +35,7 @@ export async function signIn(input: LoginInput, next?: string): Promise<ActionRe
   redirect(safeNext(next));
 }
 
-/** Cria a conta. Sem confirmação de e-mail, já volta com sessão. */
+/** Cria a conta. Sem confirmação de e-mail (ou com AUTH_AUTOCONFIRM), já volta com sessão. */
 export async function signUp(
   input: SignUpInput,
   next: string,
@@ -43,6 +44,24 @@ export async function signUp(
   if (!parsed.success) return fail(INVALID_INPUT);
 
   const supabase = await createServerSupabase();
+
+  if (autoconfirmEnabled()) {
+    const { error: createError } = await createAdminClient().auth.admin.createUser({
+      email: parsed.data.email,
+      password: parsed.data.password,
+      email_confirm: true,
+      user_metadata: { nome: parsed.data.nome },
+    });
+    if (createError) return fail(authErrorMessage(createError));
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    });
+    if (signInError) return fail(authErrorMessage(signInError));
+    return ok({ needsConfirmation: false });
+  }
+
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,

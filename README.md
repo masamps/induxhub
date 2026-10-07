@@ -49,6 +49,7 @@ O build gera a home estaticamente, então precisa do banco acessível.
 3. Não rode o seed em produção: ele cria usuários de teste.
 4. No Supabase, em Authentication > URL Configuration: Site URL com a URL da Vercel e Redirect URL `https://<seu-dominio>/**`.
 5. Sem SMTP próprio, desligue "Confirm email" em Authentication > Providers > Email (o envio gratuito é limitado). Ao ligar, o cadastro continua funcionando: o usuário confirma pelo link e volta para a etapa seguinte.
+6. Ambiente de teste sem SMTP: defina `AUTH_AUTOCONFIRM=true` e `SUPABASE_SERVICE_ROLE_KEY` (Project Settings > API) só nesse ambiente. O cadastro cria a conta já confirmada e não envia e-mail. Nunca em produção.
 
 ## Páginas
 
