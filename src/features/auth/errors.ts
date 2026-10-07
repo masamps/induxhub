@@ -10,8 +10,15 @@ const MESSAGES: Record<string, string> = {
   over_request_rate_limit: "Muitas tentativas. Aguarde um pouco e tente de novo.",
   same_password: "A nova senha precisa ser diferente da atual.",
   signup_disabled: "Cadastro temporariamente desativado.",
+  email_address_not_authorized: "Não conseguimos enviar o e-mail de confirmação para este endereço.",
+  email_address_invalid: "E-mail inválido. Confira o endereço.",
 };
 
+// GoTrue devolve 500 sem código específico quando o SMTP falha.
+const SEND_FAILED = /error sending .*email/i;
+
 export function authErrorMessage(error: AuthError) {
-  return (error.code && MESSAGES[error.code]) || "Não foi possível concluir. Tente de novo.";
+  if (error.code && MESSAGES[error.code]) return MESSAGES[error.code];
+  if (SEND_FAILED.test(error.message)) return "Não conseguimos enviar o e-mail de confirmação. Tente de novo mais tarde.";
+  return "Não foi possível concluir. Tente de novo.";
 }
