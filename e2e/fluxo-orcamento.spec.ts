@@ -154,7 +154,9 @@ test.describe.serial("fluxo de orçamento", () => {
     await page.getByRole("link", { name: new RegExp(titulo) }).click();
     await expect(page).toHaveURL(new RegExp(quoteUrl));
     await expect(page.getByText(contratante.empresa)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Montar orçamento" })).toBeVisible();
 
+    await page.getByText("Responder só com valor estimado").click();
     await page.getByLabel("Mensagem").fill("Fazemos em 12 dias, material incluso, frete por nossa conta.");
     await page.getByLabel("Valor estimado (R$)").fill("4.800,00");
     await page.getByLabel("Prazo de entrega (dias)").fill("12");

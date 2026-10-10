@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, MessageCircle, Trophy } from "lucide-react";
+import { CheckCircle2, FileText, MessageCircle, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 
@@ -146,6 +146,14 @@ export function ReplyComparison({
                   <p className="text-xs text-muted-foreground">Respondido {formatRelativeDays(reply.createdAt)}</p>
 
                   <div className="flex flex-col gap-2 sm:flex-row">
+                    {reply.proposalToken && (
+                      <Button asChild variant="outline">
+                        <Link href={`/p/${reply.proposalToken}`}>
+                          <FileText aria-hidden />
+                          Ver orçamento completo
+                        </Link>
+                      </Button>
+                    )}
                     {p.whatsapp && (
                       <Button asChild variant="whatsapp">
                         <a
