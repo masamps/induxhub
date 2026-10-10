@@ -233,6 +233,62 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"proposal_items": {
+                  Row: {
+                    "descricao": string,"id": string,"ordem": number,"proposal_id": string,"quantidade": number,"total": number | null,"unidade": string,"valor_unitario": number
+                  }
+                  Insert: {
+                    "descricao": string,"id"?: string,"ordem": number,"proposal_id": string,"quantidade": number,"total"?: number | null,"unidade"?: string,"valor_unitario": number
+                  }
+                  Update: {
+                    "descricao"?: string,"id"?: string,"ordem"?: number,"proposal_id"?: string,"quantidade"?: number,"total"?: number | null,"unidade"?: string,"valor_unitario"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "proposal_items_proposal_id_fkey"
+      columns: ["proposal_id"]
+isOneToOne: false
+      referencedRelation: "proposals"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"proposals": {
+                  Row: {
+                    "cliente_company_id": string | null,"cliente_documento": string | null,"cliente_email": string | null,"cliente_nome": string | null,"cliente_whatsapp": string | null,"condicoes_pagamento": string | null,"created_at": string,"criado_por": string | null,"desconto": number,"enviado_em": string | null,"frete": number,"id": string,"motivo_recusa": string | null,"numero": number | null,"observacoes": string | null,"origem_id": string | null,"prazo_entrega_dias": number | null,"prestador_id": string,"quote_id": string | null,"respondido_em": string | null,"status": Database["public"]['Enums']["proposal_status"],"subtotal": number,"titulo": string,"token_publico": string,"total": number,"updated_at": string,"validade": string,"versao": number,"visualizado_em": string | null
+                  }
+                  Insert: {
+                    "cliente_company_id"?: string | null,"cliente_documento"?: string | null,"cliente_email"?: string | null,"cliente_nome"?: string | null,"cliente_whatsapp"?: string | null,"condicoes_pagamento"?: string | null,"created_at"?: string,"criado_por"?: string | null,"desconto"?: number,"enviado_em"?: string | null,"frete"?: number,"id"?: string,"motivo_recusa"?: string | null,"numero"?: number | null,"observacoes"?: string | null,"origem_id"?: string | null,"prazo_entrega_dias"?: number | null,"prestador_id": string,"quote_id"?: string | null,"respondido_em"?: string | null,"status"?: Database["public"]['Enums']["proposal_status"],"subtotal"?: number,"titulo": string,"token_publico"?: string,"total"?: number,"updated_at"?: string,"validade": string,"versao"?: number,"visualizado_em"?: string | null
+                  }
+                  Update: {
+                    "cliente_company_id"?: string | null,"cliente_documento"?: string | null,"cliente_email"?: string | null,"cliente_nome"?: string | null,"cliente_whatsapp"?: string | null,"condicoes_pagamento"?: string | null,"created_at"?: string,"criado_por"?: string | null,"desconto"?: number,"enviado_em"?: string | null,"frete"?: number,"id"?: string,"motivo_recusa"?: string | null,"numero"?: number | null,"observacoes"?: string | null,"origem_id"?: string | null,"prazo_entrega_dias"?: number | null,"prestador_id"?: string,"quote_id"?: string | null,"respondido_em"?: string | null,"status"?: Database["public"]['Enums']["proposal_status"],"subtotal"?: number,"titulo"?: string,"token_publico"?: string,"total"?: number,"updated_at"?: string,"validade"?: string,"versao"?: number,"visualizado_em"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "proposals_prestador_id_fkey"
+      columns: ["prestador_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "proposals_quote_id_fkey"
+      columns: ["quote_id"]
+isOneToOne: false
+      referencedRelation: "quote_requests"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "proposals_cliente_company_id_fkey"
+      columns: ["cliente_company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "proposals_origem_id_fkey"
+      columns: ["origem_id"]
+isOneToOne: false
+      referencedRelation: "proposals"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"quote_recipients": {
                   Row: {
                     "enviado_em": string,"prestador_id": string,"quote_id": string,"respondido_em": string | null,"visualizado_em": string | null
@@ -260,13 +316,13 @@ isOneToOne: false
                   ]
                 },"quote_replies": {
                   Row: {
-                    "autor_user_id": string | null,"created_at": string,"id": string,"mensagem": string,"prazo_dias": number | null,"prestador_id": string,"quote_id": string,"valor_estimado": number | null
+                    "autor_user_id": string | null,"created_at": string,"id": string,"mensagem": string,"prazo_dias": number | null,"prestador_id": string,"proposal_id": string | null,"quote_id": string,"valor_estimado": number | null
                   }
                   Insert: {
-                    "autor_user_id"?: string | null,"created_at"?: string,"id"?: string,"mensagem": string,"prazo_dias"?: number | null,"prestador_id": string,"quote_id": string,"valor_estimado"?: number | null
+                    "autor_user_id"?: string | null,"created_at"?: string,"id"?: string,"mensagem": string,"prazo_dias"?: number | null,"prestador_id": string,"proposal_id"?: string | null,"quote_id": string,"valor_estimado"?: number | null
                   }
                   Update: {
-                    "autor_user_id"?: string | null,"created_at"?: string,"id"?: string,"mensagem"?: string,"prazo_dias"?: number | null,"prestador_id"?: string,"quote_id"?: string,"valor_estimado"?: number | null
+                    "autor_user_id"?: string | null,"created_at"?: string,"id"?: string,"mensagem"?: string,"prazo_dias"?: number | null,"prestador_id"?: string,"proposal_id"?: string | null,"quote_id"?: string,"valor_estimado"?: number | null
                   }
                   Relationships: [
                     {
@@ -405,6 +461,30 @@ isOneToOne: false
 "photo_limit":
 { Args: { "p_premium": boolean }; Returns: number
                            },
+"can_read_proposal":
+{ Args: { "p_proposal_id": string }; Returns: boolean
+                           },
+"cancel_proposal":
+{ Args: { "p_id": string }; Returns: undefined
+                           },
+"copy_proposal":
+{ Args: { "p_id": string,"p_nova_versao"?: boolean }; Returns: string
+                           },
+"get_public_proposal":
+{ Args: { "p_token": string }; Returns: Json
+                           },
+"proposal_effective_status":
+{ Args: { "p_status": Database["public"]['Enums']["proposal_status"],"p_validade": string }; Returns: string
+                           },
+"respond_proposal":
+{ Args: { "p_aceito": boolean,"p_motivo"?: string,"p_token": string }; Returns: string
+                           },
+"save_proposal":
+{ Args: { "p_dados": Json,"p_id"?: string,"p_itens": Json,"p_prestador_id": string }; Returns: string
+                           },
+"send_proposal":
+{ Args: { "p_id": string }; Returns: number
+                           },
 "quote_max_recipients":
 { Args: Record<PropertyKey, never>; Returns: number
                            },
@@ -430,7 +510,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "company_type": "contratante"|"prestador"|"ambos","member_role": "owner"|"member","metric_event": "view"|"whatsapp"|"quote_click","photo_kind": "empresa"|"trabalho","quote_status": "aberto"|"respondido"|"fechado"
+            "company_type": "contratante"|"prestador"|"ambos","member_role": "owner"|"member","metric_event": "view"|"whatsapp"|"quote_click","photo_kind": "empresa"|"trabalho","proposal_status": "rascunho"|"enviado"|"aceito"|"recusado"|"cancelado"|"substituido","quote_status": "aberto"|"respondido"|"fechado"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -546,7 +626,7 @@ export type CompositeTypes<
 export const Constants = {
   "public": {
           Enums: {
-            "company_type": ["contratante", "prestador", "ambos"],"member_role": ["owner", "member"],"metric_event": ["view", "whatsapp", "quote_click"],"photo_kind": ["empresa", "trabalho"],"quote_status": ["aberto", "respondido", "fechado"]
+            "company_type": ["contratante", "prestador", "ambos"],"member_role": ["owner", "member"],"metric_event": ["view", "whatsapp", "quote_click"],"photo_kind": ["empresa", "trabalho"],"proposal_status": ["rascunho", "enviado", "aceito", "recusado", "cancelado", "substituido"],"quote_status": ["aberto", "respondido", "fechado"]
           }
         }
 } as const
