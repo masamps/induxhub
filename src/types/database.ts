@@ -326,6 +326,12 @@ isOneToOne: false
                   }
                   Relationships: [
                     {
+      foreignKeyName: "quote_replies_proposal_id_fkey"
+      columns: ["proposal_id"]
+isOneToOne: false
+      referencedRelation: "proposals"
+      referencedColumns: ["id"]
+    },{
       foreignKeyName: "quote_replies_prestador_id_fkey"
       columns: ["prestador_id"]
 isOneToOne: false

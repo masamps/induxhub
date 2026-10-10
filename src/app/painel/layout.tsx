@@ -16,6 +16,7 @@ export default async function PainelLayout({ children }: { children: React.React
   if (provider) {
     items.push(
       { href: "/painel/orcamentos", label: "Pedidos recebidos", badge: unread },
+      { href: "/painel/propostas", label: "Meus orçamentos" },
       { href: "/painel/perfil", label: "Meu perfil" },
     );
   }
