@@ -1,4 +1,4 @@
-import { ArrowLeft, Clock, Eye, MessageCircle, Trophy } from "lucide-react";
+import { ArrowLeft, Clock, Eye, FileText, MessageCircle, Trophy } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -172,12 +172,40 @@ function ProviderView({
               </dl>
               <p className="text-sm whitespace-pre-line">{reply.mensagem}</p>
               <p className="text-xs text-muted-foreground">Enviada {formatRelativeDays(reply.createdAt)}</p>
+              {reply.proposalId && (
+                <Button asChild variant="outline" className="sm:self-start">
+                  <Link href={`/painel/propostas/${reply.proposalId}`}>
+                    <FileText aria-hidden />
+                    Ver orçamento enviado
+                  </Link>
+                </Button>
+              )}
               {lostTo && <p className="text-sm text-muted-foreground">O solicitante fechou o pedido com outro fornecedor.</p>}
             </div>
           ) : quote.status === "fechado" ? (
             <p className="text-sm text-muted-foreground">Este pedido foi encerrado pelo solicitante.</p>
           ) : (
-            <ReplyForm quoteId={quote.id} />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold">Enviar orçamento</h2>
+                <p className="text-sm text-muted-foreground">
+                  Monte item a item, com totais, validade e condições. O solicitante recebe o orçamento completo e o
+                  PDF.
+                </p>
+                <Button asChild size="lg" className="sm:self-start">
+                  <Link href={`/painel/propostas/novo?pedido=${quote.id}`}>
+                    <FileText aria-hidden />
+                    Montar orçamento
+                  </Link>
+                </Button>
+              </div>
+              <details className="rounded-xl border border-border p-3">
+                <summary className="cursor-pointer text-sm font-medium">Responder só com valor estimado</summary>
+                <div className="pt-4">
+                  <ReplyForm quoteId={quote.id} />
+                </div>
+              </details>
+            </div>
           )}
         </CardContent>
       </Card>

@@ -121,6 +121,8 @@ export type QuoteReply = {
   valorEstimado: number | null;
   prazoDias: number | null;
   createdAt: string;
+  /** Link público do orçamento detalhado, quando a resposta veio de um. */
+  proposalToken: string | null;
   prestador: {
     id: string;
     nome: string;
@@ -196,7 +198,7 @@ export async function getQuoteForOwner(id: string) {
     supabase
       .from("quote_replies")
       .select(
-        `id, mensagem, valor_estimado, prazo_dias, created_at,
+        `id, mensagem, valor_estimado, prazo_dias, created_at, proposal:proposals!proposal_id (token_publico),
          prestador:companies!prestador_id (id, nome_fantasia, slug, whatsapp, premium, city:cities!city_id (nome),
            company_stats (nota_media, total_avaliacoes, projetos_concluidos))`,
       )
@@ -220,6 +222,7 @@ export async function getQuoteForOwner(id: string) {
         valorEstimado: r.valor_estimado,
         prazoDias: r.prazo_dias,
         createdAt: r.created_at,
+        proposalToken: r.proposal?.token_publico ?? null,
         prestador: {
           id: r.prestador.id,
           nome: r.prestador.nome_fantasia,
@@ -252,7 +255,7 @@ export async function getQuoteForProvider(id: string, providerId: string) {
       .maybeSingle(),
     supabase
       .from("quote_replies")
-      .select("id, mensagem, valor_estimado, prazo_dias, created_at")
+      .select("id, mensagem, valor_estimado, prazo_dias, created_at, proposal_id")
       .eq("quote_id", id)
       .eq("prestador_id", providerId)
       .maybeSingle(),
@@ -270,6 +273,7 @@ export async function getQuoteForProvider(id: string, providerId: string) {
           valorEstimado: reply.data.valor_estimado,
           prazoDias: reply.data.prazo_dias,
           createdAt: reply.data.created_at,
+          proposalId: reply.data.proposal_id,
         }
       : null,
   };

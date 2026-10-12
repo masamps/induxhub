@@ -66,7 +66,11 @@ O build gera a home estaticamente, então precisa do banco acessível.
 | `/painel/orcamentos` | Pedidos recebidos pelo prestador (novos, respondidos) |
 | `/orcamentos` | Pedidos do solicitante |
 | `/orcamentos/novo` | Novo pedido com anexos e prévia de quantos fornecedores recebem |
-| `/orcamentos/[id]` | Solicitante compara propostas, escolhe e avalia. Prestador responde |
+| `/orcamentos/[id]` | Solicitante compara propostas, escolhe e avalia. Prestador monta orçamento ou responde só com valor |
+| `/painel/propostas` | Orçamentos do fornecedor (rascunhos, enviados, aceitos) |
+| `/painel/propostas/novo` | Editor item a item, avulso ou para um pedido (`?pedido=<id>`) |
+| `/painel/propostas/[id]` | Rascunho em edição, ou orçamento enviado com link, WhatsApp, PDF, nova versão |
+| `/p/[token]` | Orçamento para o cliente, sem login: aceitar, recusar, baixar PDF (`/p/[token]/pdf`) |
 
 ## Estrutura
 
@@ -103,6 +107,7 @@ Todo usuário do seed usa o e-mail `<slug>@induxhub.test` e a senha `induxhub123
 - RLS ativa em todas as tabelas.
 - Membro da empresa (`company_members`) edita só o próprio perfil. `premium` não é editável pelo cliente.
 - Pedidos, respostas e fechamento passam por funções (`create_quote_request`, `reply_to_quote`, `close_quote`).
+- Orçamentos do fornecedor passam por `save_proposal`, `send_proposal`, `copy_proposal`, `cancel_proposal`, `get_public_proposal` e `respond_proposal`. Ver ADR 0009.
 - Avaliação só por quem pediu o orçamento e recebeu resposta daquele prestador.
 - Plano gratuito: até 5 fotos. Premium: até 30.
 - Prestador liga ou desliga "também contrato serviços" por `set_company_buyer` (único jeito de mudar `tipo`).

@@ -28,5 +28,5 @@ export async function middleware(request: NextRequest) {
 
 // Só rotas que dependem de sessão. Páginas públicas seguem estáticas e em cache.
 export const config = {
-  matcher: ["/painel/:path*", "/orcamentos/:path*", "/login/:path*", "/cadastro/:path*", "/auth/:path*"],
+  matcher: ["/painel/:path*", "/orcamentos/:path*", "/p/:path*", "/login/:path*", "/cadastro/:path*", "/auth/:path*"],
 };
